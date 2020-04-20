@@ -1,59 +1,26 @@
 import pygame
-import array
 import math
 
 pygame.init()
 
 display_width = 900
 display_heigth = 700
-numberOfPoints = 24
+numberOfPoints = 2 * 66
 focalLength = 200
 step = 3
 degree2 = 0.005
 
-white = (255,255,255)
-black = (0,0,0)
-
-red = (255,0,0)
-green = (0,255,0)
-blue = (0,0,255)
+white = (255, 255, 255)
+black = (0, 0, 0)
+red = (255, 0, 0)
+green = (0, 255, 0)
+blue = (0, 0, 255)
 
 listOfX = [0] * numberOfPoints
 listOfY = [0] * numberOfPoints
 listOfZ = [0] * numberOfPoints
 listOfLinesToDraw = []
 
-# def moveRight():
-#     for x in range(0, numberOfPoints):
-#         listOfX[x] = listOfX[x] + step
-#
-# def moveLeft():
-#     for x in range(0, numberOfPoints):
-#         listOfX[x] = listOfX[x] - step
-#
-# def moveUp():
-#     for x in range(0, numberOfPoints):
-#         listOfY[x] = listOfY[x] - step
-#
-# def moveDown():
-#     for x in range(0, numberOfPoints):
-#         listOfY[x] = listOfY[x] + step
-#
-# def moveForward():
-#     for x in range(0, numberOfPoints):
-#         listOfZ[x] = listOfZ[x] - step
-#
-# def moveBackward():
-#     for x in range(0, numberOfPoints):
-#         listOfZ[x] = listOfZ[x] + step
-#
-# def zoomIn():
-#     global focalLength
-#     focalLength = focalLength + step
-#
-# def zoomOut():
-#     global focalLength
-#     focalLength = focalLength - step
 
 def updateCoordinates(addX, addY, addZ, addFocalLength, addRotateX, addRotateY, addRotateZ):
     global focalLength
@@ -70,7 +37,6 @@ def updateCoordinates(addX, addY, addZ, addFocalLength, addRotateX, addRotateY, 
         listOfZ[x] = listOfZ[x] + addZ
         listOfZ[x] = -math.sin(addRotateY) * listOfX[x] + math.cos(addRotateY) * listOfZ[x]
         listOfZ[x] = math.sin(addRotateX) * listOfY[x] + math.cos(addRotateX) * listOfZ[x]
-
 
 
 def makeLine2D(x1, y1, z1, x2, y2, z2):
@@ -91,11 +57,13 @@ def makeLine2D(x1, y1, z1, x2, y2, z2):
     listOfLinesToDraw.append(x4)
     listOfLinesToDraw.append(y4)
 
+
 def drawLines(linesToDraw):
     for x in range(0, len(linesToDraw), 4):
         node_1 = [linesToDraw[x], linesToDraw[x + 1]]
         node_2 = [linesToDraw[x + 2], linesToDraw[x + 3]]
-        pygame.draw.line(cameraDisplay, white, (node_1), (node_2))
+        pygame.draw.line(cameraDisplay, white, node_1, node_2)
+
 
 def centerLines(linesToDraw):
     for x in range(0, len(linesToDraw), 2):
@@ -104,7 +72,7 @@ def centerLines(linesToDraw):
         linesToDraw[x] = linesToDraw[x] + display_heigth / 2
 
 
-cameraDisplay = pygame.display.set_mode((display_width,display_heigth))
+cameraDisplay = pygame.display.set_mode((display_width, display_heigth))
 
 
 def cameraConf():
@@ -120,26 +88,22 @@ def cameraConf():
         points = [[int(x) for x in line.split()] for line in f]
 
     k = 0
-    for i in range(0, 12):
+    for i in range(0, int(numberOfPoints / 2)):
         for j in range(0, 6, 3):
             listOfX[k] = points[i][j]
             k = k + 1
 
     k = 0
-    for i in range(0, 12):
+    for i in range(0, int(numberOfPoints / 2)):
         for j in range(1, 6, 3):
             listOfY[k] = points[i][j]
             k = k + 1
 
     k = 0
-    for i in range(0, 12):
+    for i in range(0, int(numberOfPoints / 2)):
         for j in range(2, 6, 3):
             listOfZ[k] = points[i][j]
             k = k + 1
-    print(listOfX)
-    print(listOfY)
-    print(listOfZ)
-    print(len(listOfX))
 
     while True:
         for event in pygame.event.get():
@@ -147,33 +111,33 @@ def cameraConf():
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT: # move left
+                if event.key == pygame.K_LEFT:  # move left
                     addX = step
-                elif event.key == pygame.K_RIGHT: # move right
+                elif event.key == pygame.K_RIGHT:  # move right
                     addX = -step
-                elif event.key == pygame.K_UP: # move forward
+                elif event.key == pygame.K_UP:  # move forward
                     addZ = -step
-                elif event.key == pygame.K_DOWN: # move backward
+                elif event.key == pygame.K_DOWN:  # move backward
                     addZ = step
-                elif event.key == pygame.K_SLASH: # zoom in
+                elif event.key == pygame.K_SLASH:  # zoom in
                     addFocalLength = step
-                elif event.key == pygame.K_COMMA: # zoom out
+                elif event.key == pygame.K_COMMA:  # zoom out
                     addFocalLength = -step
-                elif event.key == pygame.K_w: # move up
+                elif event.key == pygame.K_w:  # move up
                     addY = step
-                elif event.key == pygame.K_s: # move down
+                elif event.key == pygame.K_s:  # move down
                     addY = -step
-                elif event.key == pygame.K_z: # rotate Y left
+                elif event.key == pygame.K_z:  # rotate Y left
                     addRotateY = degree2
-                elif event.key == pygame.K_x: # rotate Y right
+                elif event.key == pygame.K_x:  # rotate Y right
                     addRotateY = -degree2
-                elif event.key == pygame.K_c: # rotate X up
+                elif event.key == pygame.K_c:  # rotate X up
                     addRotateX = -degree2
-                elif event.key == pygame.K_v: # rotate X down
+                elif event.key == pygame.K_v:  # rotate X down
                     addRotateX = degree2
-                elif event.key == pygame.K_b: # rotate Z left
+                elif event.key == pygame.K_b:  # rotate Z left
                     addRotateZ = -degree2
-                elif event.key == pygame.K_n: # rotate Z right
+                elif event.key == pygame.K_n:  # rotate Z right
                     addRotateZ = degree2
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -191,12 +155,11 @@ def cameraConf():
                 elif event.key == pygame.K_COMMA or event.key == pygame.K_SLASH:
                     addFocalLength = 0
 
-
         cameraDisplay.fill(black)
         listOfLinesToDraw.clear()
-        updateCoordinates(addX,addY,addZ,addFocalLength,addRotateX,addRotateY,addRotateZ)
+        updateCoordinates(addX, addY, addZ, addFocalLength, addRotateX, addRotateY, addRotateZ)
         for x in range(0, (len(listOfX)), 2):
-            makeLine2D(listOfX[x], listOfY[x], listOfZ[x], listOfX[x+1], listOfY[x+1], listOfZ[x+1])
+            makeLine2D(listOfX[x], listOfY[x], listOfZ[x], listOfX[x + 1], listOfY[x + 1], listOfZ[x + 1])
         centerLines(listOfLinesToDraw)
         drawLines(listOfLinesToDraw)
         pygame.display.update()
