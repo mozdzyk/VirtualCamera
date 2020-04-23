@@ -5,16 +5,14 @@ pygame.init()
 
 display_width = 900
 display_heigth = 700
-numberOfPoints = 2 * 66
-focalLength = 200
+numberOfPoints = 2 * 78
+startingFocalLength = 200
 step = 3
 degree2 = 0.005
 
+focalLength = startingFocalLength
 white = (255, 255, 255)
 black = (0, 0, 0)
-red = (255, 0, 0)
-green = (0, 255, 0)
-blue = (0, 0, 255)
 
 listOfX = [0] * numberOfPoints
 listOfY = [0] * numberOfPoints
@@ -25,6 +23,8 @@ listOfLinesToDraw = []
 def updateCoordinates(addX, addY, addZ, addFocalLength, addRotateX, addRotateY, addRotateZ):
     global focalLength
     focalLength = focalLength + addFocalLength
+    if focalLength < startingFocalLength:
+        focalLength = startingFocalLength
     for x in range(0, numberOfPoints):
         listOfX[x] = listOfX[x] + addX
         listOfX[x] = math.cos(addRotateY) * listOfX[x] + math.sin(addRotateY) * listOfZ[x]
@@ -70,9 +70,6 @@ def centerLines(linesToDraw):
         linesToDraw[x] = linesToDraw[x] + display_width / 2
     for x in range(1, len(linesToDraw), 2):
         linesToDraw[x] = linesToDraw[x] + display_heigth / 2
-
-
-cameraDisplay = pygame.display.set_mode((display_width, display_heigth))
 
 
 def cameraConf():
@@ -165,4 +162,5 @@ def cameraConf():
         pygame.display.update()
 
 
+cameraDisplay = pygame.display.set_mode((display_width, display_heigth))
 cameraConf()
