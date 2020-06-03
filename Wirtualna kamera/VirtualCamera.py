@@ -4,7 +4,7 @@ import math
 pygame.init()
 
 display_width = 900
-display_heigth = 700
+display_height = 700
 numberOfPoints = 2 * 78
 startingFocalLength = 200
 step = 3
@@ -69,7 +69,7 @@ def centerLines(linesToDraw):
     for x in range(0, len(linesToDraw), 2):
         linesToDraw[x] = linesToDraw[x] + display_width / 2
     for x in range(1, len(linesToDraw), 2):
-        linesToDraw[x] = linesToDraw[x] + display_heigth / 2
+        linesToDraw[x] = linesToDraw[x] + display_height / 2
 
 
 def cameraConf():
@@ -162,5 +162,5 @@ def cameraConf():
         pygame.display.update()
 
 
-cameraDisplay = pygame.display.set_mode((display_width, display_heigth))
+cameraDisplay = pygame.display.set_mode((display_width, display_height))
 cameraConf()
